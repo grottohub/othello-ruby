@@ -1,3 +1,12 @@
+# extend Array to include 2.7 tally functionality
+# compatible with Ruby v.2.0+
+class Array
+  def tally
+    self.group_by { |row| row }.map { |type, count| [type, count.length] }.to_h
+  end
+end
+
+
 # Print out rules
 puts "Welcome to Othello but Ruby!\nThis is based off of a high school project I built using Python.\nI am rebuilding it in Ruby to get a better understanding of Rubyist flow control and syntax. Enjoy!"
 
@@ -73,6 +82,7 @@ def check_board
   full_rows = 0
   $gameboard.each do |row, col|
     vals = col.tally
+    p vals
     full_rows += 1 if vals["/"].nil?
     unless vals["W"].nil? || vals["B"].nil?
     begin
@@ -258,7 +268,7 @@ end
 
 # 1-PLAYER METHODS
 def computer_choice
-  accuracy = 90 # TODO: change this
+  accuracy = rand(100)
 
   valid_rows = [:A, :B, :C, :D, :E, :F, :G, :H]
   make_choice = -> { {row: valid_rows[rand(7)], col: rand(7)} }
@@ -337,11 +347,12 @@ until $gameover[:full_board]
     if choice.is_a? Hash
       $error_msg = nil
       check(choice[:row], choice[:col], $current_player, $gameboard)
-      swap_players($current_player) if $error_msg.nil?
+      #swap_players($current_player) if $error_msg.nil?
       check_board
     else
       $error_msg = "Invalid input. Please try again."
     end
+    print_board
     puts "Computer choosing..."
     cc = computer_choice
     check(cc[:row], cc[:col], $computer, $gameboard)
