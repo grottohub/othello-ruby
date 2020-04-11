@@ -65,9 +65,9 @@ end
 $computer_board = copy_board
 
 def print_board
-  print "\t1\s\s2\s\s3\s\s4\s\s5\s\s6\s\s7\s\s8\n"
+  print "\s\s\s1\s\s2\s\s3\s\s4\s\s5\s\s6\s\s7\s\s8\n"
   $gameboard.each do |row, col|
-    print "#{row}\t"
+    print "#{row}\s\s"
     col.each { |spot| print "#{spot.chomp}\s\s" if !spot.nil? }
     print "\n"
   end
@@ -82,7 +82,6 @@ def check_board
   full_rows = 0
   $gameboard.each do |row, col|
     vals = col.tally
-    p vals
     full_rows += 1 if vals["/"].nil?
     unless vals["W"].nil? || vals["B"].nil?
     begin
@@ -298,8 +297,6 @@ def computer_choice
     diff = Hash.new()
     possibilities.each { |weight, tmp| diff[(weight - average).abs] = weight }
     diff.sort_by { |weight, proximity| proximity }
-    p diff.values
-    p possibilities.values
     return possibilities[diff.values.first]
   end
 
